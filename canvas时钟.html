@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    #cvs {
+        border: 1px solid #f00;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+    }
+</style>
+
+<body>
+    <canvas id="cvs" width="600px" height="600px"></canvas>
+</body>
+<script>
+    const cvsDom = document.getElementById('cvs') //获取canvas元素
+    const context = cvsDom.getContext('2d') //创建canvas绘制元素
+
+
+    
+    
+    //保存初始绘图环境状态
+    // context.save()
+    setInterval(function(){
+
+        
+        context.save()
+
+         //定时时器清空上次的绘图
+         context.clearRect(0, 0, cvsDom.width, cvsDom.height);
+
+
+
+        //绘制表盘
+        //指定中心点的位置
+        context.translate(300, 300);
+    
+        //保存中心点位置
+        context.save()
+        // context.restore()
+        context.beginPath()
+        context.arc(0, 0, 180, Math.PI / 180 * 0, Math.PI / 180 * 360)
+        context.stroke()
+    
+    
+        context.beginPath()
+        context.arc(0, 0, 20, Math.PI / 180 * 0, Math.PI / 180 * 360)
+        context.stroke()
+    
+    
+        //绘制表盘刻度
+    
+        //绘制小时刻度
+        for (let i = 0; i < 12; i++) {
+            //指定旋转角度
+            context.rotate(2 * Math.PI / 12)
+    
+            //开始绘制12个小刻度呢
+            context.beginPath()
+            context.lineWidth = 5
+            context.moveTo(180, 0)
+            context.lineTo(160, 0)
+            context.stroke()
+        }
+        context.restore()
+        context.save()
+    
+        //绘制分刻度
+    
+        for (let i = 0; i < 60; i++) {
+            //指定旋转角度
+            context.rotate(2 * Math.PI / 60)
+    
+            //绘制12个小刻度
+            context.beginPath()
+            context.lineWidth = 1
+            context.moveTo(180, 0)
+            context.lineTo(170, 0)
+            context.stroke()
+        }
+        
+        context.restore()
+        context.save()
+    
+        //获取时分秒
+        const d = new Date() //当前时间
+        const hour = d.getHours() % 12 //时   %12 就是取模 也就是取余数
+        const min = d.getMinutes() //分
+        const sec = d.getSeconds() //秒
+        console.log(hour, min, sec);
+        //根据时分秒 来换算对应的时分秒针的旋转角度
+        context.beginPath()
+        
+        //时针的旋转角度
+        context.rotate(2 * Math.PI / 12 * hour + 2 * Math.PI / 12 * (min / 60) - Math.PI /2)
+    
+    
+        //绘制时针
+        context.lineWidth = 5
+        context.moveTo(0,0)
+        context.lineTo(60,0)
+        context.stroke()
+    
+        context.restore()
+        context.save()
+    
+        //分针
+    
+        context.beginPath()
+        
+        //分针的旋转角度
+        context.rotate(2 * Math.PI / 60 * min + 2 * Math.PI / 60 * (sec / 60) - Math.PI /2)
+    
+        context.lineWidth = 3
+        context.strokeStyle = "pink"
+        context.moveTo(0,0)
+        context.lineTo(80,0)
+        context.stroke()
+        
+        context.restore()
+        context.save()
+    
+        //秒针
+        context.beginPath()
+        
+        //秒针的旋转角度
+        context.rotate(2 * Math.PI / 60 *sec- Math.PI /2)
+    
+        context.lineWidth = 1
+        context.strokeStyle = "#f00"
+        context.moveTo(0,0)
+        context.lineTo(100,0)
+        context.stroke()
+
+        context.restore()
+        context.save()
+        context.restore()
+        context.restore()
+    },1000)
+</script>
+
+</html>
